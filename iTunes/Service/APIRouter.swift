@@ -7,6 +7,8 @@
 
 import Foundation
 //https://itunes.apple.com/search?term=""&media=all&limit=20&offset=0
+//https://itunes.apple.com/search?term=""&media=all&limit=20&offset=0
+
 
 enum APIRouter: ServiceConfiguration {
 	case search(term: String?, media: MediaType, limit: Int, offset: Int)
@@ -19,7 +21,7 @@ enum APIRouter: ServiceConfiguration {
 	
 	private var endPoint: String {
 		switch self {
-		case .search: return "/search"
+		case .search: return "/search?"
 		case .movie: return "/search?term=movie"
 		case .music: return "/search?term=music"
 		case .app: return "/search?term=app"
@@ -27,29 +29,30 @@ enum APIRouter: ServiceConfiguration {
 		}
 	}
 	
-	private var parameters: [String: String] {
-		var params: [String: String] = [:]
+	private var parameters: [(String, String)] {
+		var params: [(String, String)] = []
 		switch self {
 		case .search(let term, let media, let limit, let offset):
-			params["term"] = term
-			params["media"] = media.value
-			params["limit"] = "\(limit)"
-			params["offset"] = "\(offset)"
+			params.append(("term", term ?? ""))
+			params.append(("media", media.value))
+			params.append(("limit", "\(limit)"))
+			params.append(("offset", "\(offset)"))
 		case .movie(let term, let media, let limit, let offset),
 			 .music(let term, let media, let limit, let offset),
 			 .app(let term, let media, let limit, let offset),
 			 .book(let term, let media, let limit, let offset):
-			params["term"] = term
-			params["media"] = media.value
-			params["limit"] = "\(limit)"
-			params["offset"] = "\(offset)"
+			params.append(("term", term ?? ""))
+			params.append(("media", media.value))
+			params.append(("limit", "\(limit)"))
+			params.append(("offset", "\(offset)"))
 		}
 		return params
 	}
 	
 	var urlString: String {
-		let paramString = parameters.map { "\($0.key)=\($0.value)" }.joined(separator: "&")
-		return APIRouter.baseURL + endPoint + "?" + paramString
+		let paramString = parameters.map { "\($0.0)=\($0.1)" }.joined(separator: "&")
+		print(APIRouter.baseURL + endPoint + paramString)
+		return APIRouter.baseURL + endPoint + paramString
 	}
 }
 

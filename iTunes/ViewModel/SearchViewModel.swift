@@ -8,7 +8,7 @@
 import Foundation
 
 protocol SearchViewModelProtocol {
-	func fetchData(_ query: String)
+	func fetchData(_ query: String, mediaType: MediaType)
 	func setDelegate(output: SearchOutput)
 	func changeLoading()
 	
@@ -32,7 +32,7 @@ final class SearchViewModel: SearchViewModelProtocol {
 	func changeLoading() {
 		isLoading = !isLoading
 	}
-	func fetchData(_ query: String) {
+	func fetchData(_ query: String, mediaType: MediaType) {
 		isLoading = true
 		searchService.request(route: APIRouter.search(term: query, media: MediaType.all, limit: 20, offset: 0), result: { [weak self] (result: Result<SearchResponseModel, ServiceError>) in
 			guard let self = self else { return }
@@ -46,11 +46,18 @@ final class SearchViewModel: SearchViewModelProtocol {
 				print(response)
 				#endif
 			case .failure(let error):
-				print("Error: \(error.localizedDescription)")
+				switch error {
+				case .invalidURL:
+					print("Error: Invalid URL")
+				case .unableToParseData:
+					print("Error: Unable to parse data")
+				case .networkError(let networkError):
+					print("Network Error: \(networkError.localizedDescription)")
+				case .serverError(let statusCode):
+					print("Server Error: \(statusCode)")
+				}
 			}
 		})
 	}
-	
-	
 }
 

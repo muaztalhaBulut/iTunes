@@ -62,7 +62,7 @@ class HomeViewContoller: UIViewController {
 		setSegment()
 		setupCollectionView()
 		viewModel.setDelegate(output: self)
-		viewModel.fetchData(searchBar.text ?? "")
+		fetchData()
 	}
 	
 	private func setupSearchBar() {
@@ -107,26 +107,44 @@ class HomeViewContoller: UIViewController {
 			bottomConstraint: .zero,
 			trailingConstraint: .zero)
 	}
+	private func filterResults() -> [MediaItem] {
+			let mediaType = MediaType(segment: segmentedControl.selectedSegmentIndex) ?? .all
+			if mediaType == .all {
+				return results
+			} else {
+				return results.filter { $0.kind == mediaType.value }
+			}
+		}
+		
+		func fetchData() {
+			guard let query = searchBar.text, !query.isEmpty else {
+				results = []
+				collectionView.reloadData()
+				return
+			}
+			let mediaType = MediaType(segment: segmentedControl.selectedSegmentIndex) ?? .all
+			viewModel.fetchData(query, mediaType: mediaType)
+		}
+	
 	@objc
 	func segmentedControl(_ sender: UISegmentedControl) {
-		let selectedSegmentIndex = sender.selectedSegmentIndex
-		guard let mediaType = MediaType(segment: selectedSegmentIndex) else { return }
-		
-		collectionView.scrollToItem(at: .init(row: .zero, section: .zero), at: .centeredVertically, animated: true)
+		collectionView.reloadData()
 	}
 }
 
 extension HomeViewContoller: UICollectionViewDataSource {
 	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-		// Return the number of items you want to display in the collection view
-		return results.count
+		let filteredResults = filterResults()
+		return filteredResults.count
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchCollectionViewCell.Identifier.custom.rawValue, for: indexPath) as! SearchCollectionViewCell
-		cell.configure(model: results[indexPath.row])
+		let filteredResults = filterResults()
+		cell.configure(model: filteredResults[indexPath.row])
 		return cell
 	}
+	
 }
 
 extension HomeViewContoller: UICollectionViewDelegateFlowLayout {
@@ -152,8 +170,17 @@ extension HomeViewContoller: SearchOutput {
 }
 
 extension HomeViewContoller: UISearchBarDelegate {
+	func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+		if searchText.count >= 3 {
+			fetchData()
+		} else {
+			results = []
+			collectionView.reloadData()
+		}
+	}
+	
 	func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
 		searchBar.resignFirstResponder()
-		viewModel.fetchData(searchBar.text ?? "")
 	}
 }
+
