@@ -29,6 +29,10 @@ enum APIRouter: ServiceConfiguration {
 		}
 	}
 	
+	var method: HTTPMethod {
+		return .get
+	}
+	
 	private var parameters: [(String, String)] {
 		var params: [(String, String)] = []
 		switch self {

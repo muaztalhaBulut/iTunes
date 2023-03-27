@@ -12,8 +12,7 @@ protocol SearchOutput {
 	func saveDatas(values: [MediaItem])
 }
 
-class HomeViewContoller: UIViewController {
-	
+final class HomeViewContoller: UIViewController {
 	private lazy var results: [MediaItem] = []
 	private lazy var viewModel: SearchViewModelProtocol = SearchViewModel()
 	
@@ -107,44 +106,32 @@ class HomeViewContoller: UIViewController {
 			bottomConstraint: .zero,
 			trailingConstraint: .zero)
 	}
-	private func filterResults() -> [MediaItem] {
-			let mediaType = MediaType(segment: segmentedControl.selectedSegmentIndex) ?? .all
-			if mediaType == .all {
-				return results
-			} else {
-				return results.filter { $0.kind == mediaType.value }
-			}
+	func fetchData() {
+		guard let query = searchBar.text, !query.isEmpty else {
+			results = []
+			collectionView.reloadData()
+			return
 		}
-		
-		func fetchData() {
-			guard let query = searchBar.text, !query.isEmpty else {
-				results = []
-				collectionView.reloadData()
-				return
-			}
-			let mediaType = MediaType(segment: segmentedControl.selectedSegmentIndex) ?? .all
-			viewModel.fetchData(query, mediaType: mediaType)
-		}
+		let mediaType = MediaType(segment: segmentedControl.selectedSegmentIndex) ?? .all
+		viewModel.fetchData(query, mediaType: mediaType)
+	}
 	
 	@objc
 	func segmentedControl(_ sender: UISegmentedControl) {
-		collectionView.reloadData()
+		fetchData()
 	}
 }
 
 extension HomeViewContoller: UICollectionViewDataSource {
 	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-		let filteredResults = filterResults()
-		return filteredResults.count
+		return self.results.count
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchCollectionViewCell.Identifier.custom.rawValue, for: indexPath) as! SearchCollectionViewCell
-		let filteredResults = filterResults()
-		cell.configure(model: filteredResults[indexPath.row])
+		cell.configure(model: self.results[indexPath.row])
 		return cell
 	}
-	
 }
 
 extension HomeViewContoller: UICollectionViewDelegateFlowLayout {
@@ -162,8 +149,8 @@ extension HomeViewContoller: SearchOutput {
 	}
 	
 	func saveDatas(values: [MediaItem]) {
-		results = values
-		DispatchQueue.main.async {
+		self.results = values
+		DispatchQueue.main.sync {
 			self.collectionView.reloadData()
 		}
 	}

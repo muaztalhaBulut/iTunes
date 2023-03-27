@@ -15,11 +15,12 @@ protocol Loading {
 
 // MARK: - LoadingManager
 final class LoadingManager: Loading {
-	
 	// MARK: Properties
 	static let shared: LoadingManager = .init()
 	
-	enum Constants {
+	private init() {}
+	
+	private enum Constants {
 		static let cornerRadius = 8.0
 		static let loadingViewWidth = 74.0
 		static let loadingViewHeight = 74.0

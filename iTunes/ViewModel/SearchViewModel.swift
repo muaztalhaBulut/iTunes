@@ -31,12 +31,11 @@ final class SearchViewModel: SearchViewModelProtocol {
 	}
 	func changeLoading() {
 		isLoading = !isLoading
+		searchOutPut?.changeLoading(isLoad: isLoading)
 	}
 	func fetchData(_ query: String, mediaType: MediaType) {
-		isLoading = true
-		searchService.request(route: APIRouter.search(term: query, media: MediaType.all, limit: 20, offset: 0), result: { [weak self] (result: Result<SearchResponseModel, ServiceError>) in
-			guard let self = self else { return }
-			self.isLoading = false
+		searchService.request(route: APIRouter.search(term: query, media: mediaType, limit: 20, offset: 0)) { [weak self] (result: Result<SearchResponseModel, ServiceError>) in
+			guard let self else {return}
 			self.searchOutPut?.changeLoading(isLoad: false)
 			switch result {
 			case .success(let response):
@@ -57,7 +56,8 @@ final class SearchViewModel: SearchViewModelProtocol {
 					print("Server Error: \(statusCode)")
 				}
 			}
-		})
+		}
 	}
 }
+
 

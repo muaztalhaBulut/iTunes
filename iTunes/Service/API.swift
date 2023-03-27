@@ -1,16 +1,6 @@
 //
 //  API.swift
-//  iTunesAppCodeChallenge
-//
-//  Created by Talha on 22.03.2023.
-//
-
-import Foundation
-
-
-//
-//  API.swift
-//  iTunesAppCodeChallenge
+//  iTunes
 //
 //  Created by Talha on 22.03.2023.
 //
@@ -25,36 +15,50 @@ enum ServiceError: Error {
 }
 
 protocol ServiceProtocol {
-	func request<T: Decodable>(route: APIRouter, result: @escaping (Result<T, ServiceError>) -> Void)
+	func request<T: Decodable>(route: ServiceConfiguration, result: @escaping (Result<T, ServiceError>) -> Void)
 }
 
 class APIService: ServiceProtocol {
-	func request<T: Decodable>(route: APIRouter, result: @escaping (Result<T, ServiceError>) -> Void) {
-
-		guard let url = URL.init(string: route.urlString) else {
+	func request<T: Decodable>(route: ServiceConfiguration, result: @escaping (Result<T, ServiceError>) -> Void) {
+		guard let url = URL(string: route.urlString) else {
 			result(.failure(.invalidURL))
 			return
 		}
-
-		let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+		
+		var urlRequest = URLRequest(url: url)
+		urlRequest.httpMethod = route.method.rawValue
+		// Added to manipulate too many HTTP request error
+		urlRequest.setValue("XYZ", forHTTPHeaderField: "User-Agent")
+		
+		let _ = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
 			if let error = error {
 				result(.failure(.networkError(error)))
 				return
 			}
+			
+			guard let httpResponse = response as? HTTPURLResponse else {
+				result(.failure(.serverError(0)))
+				return
+			}
+
+			guard 200..<300 ~= httpResponse.statusCode else {
+				result(.failure(.serverError(httpResponse.statusCode)))
+				return
+			}
+
 			guard let data = data else {
 				result(.failure(.unableToParseData))
 				return
 			}
 
 			do {
-				let model = try JSONDecoder().decode(T.self, from: data)
+				let decoder = JSONDecoder()
+				decoder.keyDecodingStrategy = .convertFromSnakeCase
+				let model = try decoder.decode(T.self, from: data)
 				result(.success(model))
-				
 			} catch {
 				result(.failure(.unableToParseData))
 			}
-
-		}
-		task.resume()
+		}.resume()
 	}
 }
