@@ -147,6 +147,16 @@ extension SearchViewController: UICollectionViewDataSource {
 		return cell
 	}
 }
+extension SearchViewController: UICollectionViewDelegate {
+	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+		collectionView.deselectItem(at: indexPath, animated: true)
+		let selectedResult = results[indexPath.row]
+		let detailViewModel = DetailViewModel(mediaItem: selectedResult)
+		let detailViewController = SearchDetailViewController(viewModel: detailViewModel)
+		detailViewController.configure(with: detailViewModel)
+		navigationController?.pushViewController(detailViewController, animated: true)
+	}
+}
 
 extension SearchViewController: UICollectionViewDelegateFlowLayout {
 	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {

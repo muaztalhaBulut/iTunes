@@ -24,6 +24,9 @@
 		BC1438C129CDFDB2000A7F4D /* MediaType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1438BD29CDFDB2000A7F4D /* MediaType.swift */; };
 		BC1438C229CDFDB2000A7F4D /* ServiceConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1438BE29CDFDB2000A7F4D /* ServiceConfiguration.swift */; };
 		BC1438C329CDFDB2000A7F4D /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1438BF29CDFDB2000A7F4D /* API.swift */; };
+		BC1438C829D2E1A2000A7F4D /* SearchDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1438C729D2E1A2000A7F4D /* SearchDetailViewController.swift */; };
+		BC1438CA29D2E70E000A7F4D /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1438C929D2E70E000A7F4D /* DetailViewModel.swift */; };
+		BC1438CC29D2EB5B000A7F4D /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1438CB29D2EB5B000A7F4D /* String+Ext.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +50,9 @@
 		BC1438BD29CDFDB2000A7F4D /* MediaType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaType.swift; sourceTree = "<group>"; };
 		BC1438BE29CDFDB2000A7F4D /* ServiceConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceConfiguration.swift; sourceTree = "<group>"; };
 		BC1438BF29CDFDB2000A7F4D /* API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
+		BC1438C729D2E1A2000A7F4D /* SearchDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDetailViewController.swift; sourceTree = "<group>"; };
+		BC1438C929D2E70E000A7F4D /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
+		BC1438CB29D2EB5B000A7F4D /* String+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
 		FFD07F43B6A0E0AA1EEE39E9 /* Pods-iTunes.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iTunes.release.xcconfig"; path = "Target Support Files/Pods-iTunes/Pods-iTunes.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -116,6 +122,7 @@
 			isa = PBXGroup;
 			children = (
 				BC1438A029CDFB23000A7F4D /* SearchViewModel.swift */,
+				BC1438C929D2E70E000A7F4D /* DetailViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -124,6 +131,7 @@
 			isa = PBXGroup;
 			children = (
 				BC1438AA29CDFB5F000A7F4D /* Home */,
+				BC1438C629D2E186000A7F4D /* Detail */,
 				BC1438AC29CDFB5F000A7F4D /* Cells */,
 			);
 			path = View;
@@ -157,6 +165,7 @@
 			isa = PBXGroup;
 			children = (
 				BC1438B729CDFBE8000A7F4D /* UI+Ext.swift */,
+				BC1438CB29D2EB5B000A7F4D /* String+Ext.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -182,6 +191,14 @@
 				BC1438BF29CDFDB2000A7F4D /* API.swift */,
 			);
 			path = Service;
+			sourceTree = "<group>";
+		};
+		BC1438C629D2E186000A7F4D /* Detail */ = {
+			isa = PBXGroup;
+			children = (
+				BC1438C729D2E1A2000A7F4D /* SearchDetailViewController.swift */,
+			);
+			path = Detail;
 			sourceTree = "<group>";
 		};
 		E2F931144E53C9A18CC250A7 /* Pods */ = {
@@ -308,6 +325,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				BC1438C129CDFDB2000A7F4D /* MediaType.swift in Sources */,
+				BC1438C829D2E1A2000A7F4D /* SearchDetailViewController.swift in Sources */,
+				BC1438CC29D2EB5B000A7F4D /* String+Ext.swift in Sources */,
 				BC1438AE29CDFB5F000A7F4D /* SearchViewContoller.swift in Sources */,
 				BC14389D29CDFB1B000A7F4D /* LoadingManager.swift in Sources */,
 				BC1438A129CDFB23000A7F4D /* SearchViewModel.swift in Sources */,
@@ -321,6 +340,7 @@
 				BC14388629CDF82C000A7F4D /* SceneDelegate.swift in Sources */,
 				BC14389929CDFAE6000A7F4D /* RequestModel.swift in Sources */,
 				BC1438AF29CDFB5F000A7F4D /* SearchCollectionViewCell.swift in Sources */,
+				BC1438CA29D2E70E000A7F4D /* DetailViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
