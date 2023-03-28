@@ -27,14 +27,14 @@ final class SearchDetailViewController: UIViewController {
 		let label = UILabel()
 		label.numberOfLines = 0
 		label.textAlignment = .left
-		label.textColor = .brown
+		label.textColor = .black
 		return label
 	}()
 	private lazy var releaseDateLabel: UILabel = {
 		let label = UILabel()
 		label.numberOfLines = 0
 		label.textAlignment = .left
-		label.textColor = .blue
+		label.textColor = .black
 		return label
 	}()
 	private lazy var contentStackView: UIStackView = {
@@ -65,9 +65,9 @@ final class SearchDetailViewController: UIViewController {
 	func configure(with viewModel: DetailViewModel) {
 		self.viewModel = viewModel
 		self.artworkImageView.kf.setImage(with: URL(string: viewModel.artworkUrl100))
-		self.collectionNameLabel.text = viewModel.collectionName
-		self.countryLabel.text = viewModel.country
-		self.releaseDateLabel.text = viewModel.releaseDate
+		self.collectionNameLabel.text = "Collection Name: \(viewModel.collectionName)"
+		self.countryLabel.text = "Country: \(viewModel.country)"
+		self.releaseDateLabel.text = "Release Date: \(viewModel.releaseDate)"
 	}
 	private func configureUIComponent() {
 		view.addSubview(artworkImageView)
