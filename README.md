@@ -1,6 +1,7 @@
 # iTunes
 
 iTunes Search API
+
 Data was transferred to Collectionview via iTunes API. Filtered by categories and added a detail page. Pagination applied.
 
 -Architecture Used: MVVM
