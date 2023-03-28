@@ -8,7 +8,7 @@
 import Foundation
 
 protocol SearchViewModelProtocol {
-	func fetchData(_ query: String, mediaType: MediaType)
+	func fetchData(_ query: String, mediaType: MediaType, limit: Int, offset: Int)
 	func setDelegate(output: SearchOutput)
 	func changeLoading()
 	
@@ -33,7 +33,7 @@ final class SearchViewModel: SearchViewModelProtocol {
 		isLoading = !isLoading
 		searchOutPut?.changeLoading(isLoad: isLoading)
 	}
-	func fetchData(_ query: String, mediaType: MediaType) {
+	func fetchData(_ query: String, mediaType: MediaType, limit: Int, offset: Int) {
 		searchService.request(route: APIRouter.search(term: query, media: mediaType, limit: 20, offset: 0)) { [weak self] (result: Result<SearchResponseModel, ServiceError>) in
 			guard let self else {return}
 			self.searchOutPut?.changeLoading(isLoad: false)

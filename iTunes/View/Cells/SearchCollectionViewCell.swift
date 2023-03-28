@@ -13,8 +13,9 @@ final class SearchCollectionViewCell: UICollectionViewCell {
 	
 	private lazy var imageView: UIImageView = {
 		let imageView = UIImageView()
-		imageView.contentMode = .scaleAspectFit
+		imageView.contentMode = .scaleAspectFill
 		imageView.clipsToBounds = true
+		imageView.backgroundColor = .lightGray
 		imageView.translatesAutoresizingMaskIntoConstraints = false
 		return imageView
 	}()
@@ -30,7 +31,11 @@ final class SearchCollectionViewCell: UICollectionViewCell {
 			top: contentView.topAnchor,
 			leading: contentView.leadingAnchor,
 			bottom: contentView.bottomAnchor,
-			trailing: contentView.trailingAnchor)
+			trailing: contentView.trailingAnchor,
+			topConstraint: 5,
+			leadingConstraint: 10,
+			bottomConstraint: 5,
+			trailingConstraint: 10)
 	}
 	
 	required init?(coder: NSCoder) {

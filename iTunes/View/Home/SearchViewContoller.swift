@@ -1,5 +1,5 @@
 //
-//  HomeViewContoller.swift
+//  SearchViewController.swift
 //  iTunesAppCodeChallenge
 //
 //  Created by Talha on 24.03.2023.
@@ -12,16 +12,23 @@ protocol SearchOutput {
 	func saveDatas(values: [MediaItem])
 }
 
-final class HomeViewContoller: UIViewController {
+final class SearchViewController: UIViewController {
 	private lazy var results: [MediaItem] = []
 	private lazy var viewModel: SearchViewModelProtocol = SearchViewModel()
+	private var query: String = ""
+	private var mediaType: MediaType = .all
+	private var offset: Int = 0
 	
 	private lazy var collectionView: UICollectionView = {
 		let layout = UICollectionViewFlowLayout()
-		let itemWidth = floor((view.bounds.width - layout.minimumInteritemSpacing * 3) / 4)
-		layout.itemSize = CGSize(width: itemWidth, height: itemWidth)
-		layout.minimumInteritemSpacing = 5
-		layout.minimumLineSpacing = 5
+		let padding: CGFloat = 20
+		let horizontalSpacing: CGFloat = 10
+		let itemWidth = (view.bounds.width - padding * 2 - horizontalSpacing) / 2
+		let itemHeight = itemWidth * 1.25
+		layout.itemSize = CGSize(width: itemWidth, height: itemHeight)
+		layout.sectionInset = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
+		layout.minimumInteritemSpacing = horizontalSpacing
+		layout.minimumLineSpacing = 10
 		
 		let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
 		collectionView.backgroundColor = .white
@@ -113,16 +120,23 @@ final class HomeViewContoller: UIViewController {
 			return
 		}
 		let mediaType = MediaType(segment: segmentedControl.selectedSegmentIndex) ?? .all
-		viewModel.fetchData(query, mediaType: mediaType)
+		viewModel.fetchData(query, mediaType: mediaType, limit: 20, offset: offset)
+	}
+	func resetResults() {
+		offset = 0
+		results.removeAll()
+		collectionView.reloadData()
 	}
 	
 	@objc
 	func segmentedControl(_ sender: UISegmentedControl) {
+		mediaType = MediaType(segment: sender.selectedSegmentIndex) ?? .all
+		resetResults()
 		fetchData()
 	}
 }
 
-extension HomeViewContoller: UICollectionViewDataSource {
+extension SearchViewController: UICollectionViewDataSource {
 	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 		return self.results.count
 	}
@@ -134,7 +148,7 @@ extension HomeViewContoller: UICollectionViewDataSource {
 	}
 }
 
-extension HomeViewContoller: UICollectionViewDelegateFlowLayout {
+extension SearchViewController: UICollectionViewDelegateFlowLayout {
 	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
 		return 5
 	}
@@ -142,27 +156,35 @@ extension HomeViewContoller: UICollectionViewDelegateFlowLayout {
 	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
 		return 5
 	}
+	func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+		if indexPath.row == results.count - 1 {
+			offset += 20
+			viewModel.fetchData(query, mediaType: mediaType, limit: 20, offset: offset)
+		}
+	}
 }
-extension HomeViewContoller: SearchOutput {
+extension SearchViewController: SearchOutput {
 	func changeLoading(isLoad: Bool) {
 		isLoad ? LoadingManager.shared.show() : LoadingManager.shared.hide()
 	}
 	
 	func saveDatas(values: [MediaItem]) {
-		self.results = values
+		self.results.append(contentsOf: values)
 		DispatchQueue.main.sync {
 			self.collectionView.reloadData()
 		}
 	}
 }
 
-extension HomeViewContoller: UISearchBarDelegate {
+extension SearchViewController: UISearchBarDelegate {
 	func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
 		if searchText.count >= 3 {
+			query = searchText
+			resetResults()
 			fetchData()
 		} else {
-			results = []
-			collectionView.reloadData()
+			query = ""
+			resetResults()
 		}
 	}
 	
