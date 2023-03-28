@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol SearchOutput {
+protocol SearchOutput: AnyObject {
 	func changeLoading(isLoad: Bool)
 	func saveDatas(values: [MediaItem])
 }

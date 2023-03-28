@@ -15,7 +15,7 @@ final class SearchCollectionViewCell: UICollectionViewCell {
 		let imageView = UIImageView()
 		imageView.contentMode = .scaleAspectFill
 		imageView.clipsToBounds = true
-		imageView.backgroundColor = .lightGray
+		imageView.backgroundColor = .gray
 		imageView.translatesAutoresizingMaskIntoConstraints = false
 		return imageView
 	}()
@@ -25,6 +25,7 @@ final class SearchCollectionViewCell: UICollectionViewCell {
 	
 	override init(frame: CGRect) {
 		super.init(frame: frame)
+		self.backgroundColor = .lightGray
 		
 		contentView.addSubview(imageView)
 		imageView.setConstaints(
@@ -32,11 +33,12 @@ final class SearchCollectionViewCell: UICollectionViewCell {
 			leading: contentView.leadingAnchor,
 			bottom: contentView.bottomAnchor,
 			trailing: contentView.trailingAnchor,
-			topConstraint: 5,
-			leadingConstraint: 10,
-			bottomConstraint: 5,
-			trailingConstraint: 10)
+			topConstraint: 15,
+			leadingConstraint: 15,
+			bottomConstraint: 15,
+			trailingConstraint: 15)
 	}
+	
 	
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")

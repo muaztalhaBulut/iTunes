@@ -18,10 +18,10 @@ protocol SearchViewModelProtocol {
 }
 
 final class SearchViewModel: SearchViewModelProtocol {
-	var searchOutPut: SearchOutput?
+	weak var searchOutPut: SearchOutput?
 	var searchService: ServiceProtocol
 	var searchResult: [MediaItem] = []
-	var isLoading = false
+	private var isLoading = false;
 	
 	init() {
 		searchService = APIService()
@@ -36,9 +36,9 @@ final class SearchViewModel: SearchViewModelProtocol {
 	func fetchData(_ query: String, mediaType: MediaType, limit: Int, offset: Int) {
 		searchService.request(route: APIRouter.search(term: query, media: mediaType, limit: 20, offset: 0)) { [weak self] (result: Result<SearchResponseModel, ServiceError>) in
 			guard let self else {return}
-			self.searchOutPut?.changeLoading(isLoad: false)
 			switch result {
 			case .success(let response):
+				self.changeLoading()
 				self.searchResult = response.results ?? []
 				self.searchOutPut?.saveDatas(values: self.searchResult)
 				#if DEBUG
@@ -56,7 +56,9 @@ final class SearchViewModel: SearchViewModelProtocol {
 					print("Server Error: \(statusCode)")
 				}
 			}
+			self.searchOutPut?.changeLoading(isLoad: false)
 		}
+		
 	}
 }
 
