@@ -27,6 +27,9 @@ class APIService: ServiceProtocol {
 		
 		var urlRequest = URLRequest(url: url)
 		urlRequest.httpMethod = route.method.rawValue
+        
+        // Added to manipulate too many HTTP request error
+        urlRequest.setValue("XYZ", forHTTPHeaderField: "User-Agent")
 		
 		let _ = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
 			if let error = error {
