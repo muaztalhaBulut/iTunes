@@ -63,7 +63,7 @@ final class SearchDetailViewController: UIViewController {
 		configureUIComponent()
 	}
 	func configure(with viewModel: DetailViewModel) {
-		self.viewModel = viewModel
+		//self.viewModel = viewModel
 		self.artworkImageView.kf.setImage(with: URL(string: viewModel.artworkUrl100))
 		self.collectionNameLabel.text = "Collection Name: \(viewModel.collectionName)"
 		self.countryLabel.text = "Country: \(viewModel.country)"

@@ -26,13 +26,16 @@ final class SearchViewModel: SearchViewModelProtocol {
 	init() {
 		searchService = APIService()
 	}
+	/// Sets the output delegate
 	func setDelegate(output: SearchOutput) {
 		self.searchOutPut = output
 	}
+	///Changes the loading state and notifies the output delegate
 	func changeLoading() {
 		isLoading = !isLoading
 		searchOutPut?.changeLoading(isLoad: isLoading)
 	}
+	/// Fetches data from the service and saves the result
 	func fetchData(_ query: String, mediaType: MediaType, limit: Int, offset: Int) {
 		searchService.request(route: APIRouter.search(term: query, media: mediaType, limit: 20, offset: 0)) { [weak self] (result: Result<SearchResponseModel, ServiceError>) in
 			guard let self else {return}

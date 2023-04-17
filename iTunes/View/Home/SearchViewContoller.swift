@@ -15,9 +15,9 @@ protocol SearchOutput: AnyObject {
 final class SearchViewController: UIViewController {
 	private lazy var results: [MediaItem] = []
 	private lazy var viewModel: SearchViewModelProtocol = SearchViewModel()
-	private var query: String = ""
-	private var mediaType: MediaType = .all
-	private var offset: Int = 0
+	private lazy var query: String = ""
+	private lazy var mediaType: MediaType = .all
+	private lazy var offset: Int = 0
 	
 	private lazy var collectionView: UICollectionView = {
 		let layout = UICollectionViewFlowLayout()
@@ -50,7 +50,6 @@ final class SearchViewController: UIViewController {
 		], for: .normal)
 		return segmentedControl
 	}()
-	
 	private lazy var searchBar: UISearchBar = {
 		let searchBar = UISearchBar()
 		searchBar.placeholder = "Search"
@@ -113,7 +112,7 @@ final class SearchViewController: UIViewController {
 			bottomConstraint: .zero,
 			trailingConstraint: .zero)
 	}
-	func fetchData() {
+	fileprivate func fetchData() {
 		guard let query = searchBar.text, !query.isEmpty else {
 			results = []
 			collectionView.reloadData()

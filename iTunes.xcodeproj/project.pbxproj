@@ -185,10 +185,10 @@
 		BC1438BB29CDFDB2000A7F4D /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				BC1438BF29CDFDB2000A7F4D /* API.swift */,
 				BC1438BC29CDFDB2000A7F4D /* APIRouter.swift */,
 				BC1438BD29CDFDB2000A7F4D /* MediaType.swift */,
 				BC1438BE29CDFDB2000A7F4D /* ServiceConfiguration.swift */,
-				BC1438BF29CDFDB2000A7F4D /* API.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";

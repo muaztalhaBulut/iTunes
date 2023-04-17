@@ -27,8 +27,6 @@ class APIService: ServiceProtocol {
 		
 		var urlRequest = URLRequest(url: url)
 		urlRequest.httpMethod = route.method.rawValue
-		// Added to manipulate too many HTTP request error
-		urlRequest.setValue("XYZ", forHTTPHeaderField: "User-Agent")
 		
 		let _ = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
 			if let error = error {
@@ -40,12 +38,7 @@ class APIService: ServiceProtocol {
 				result(.failure(.serverError(0)))
 				return
 			}
-
-			guard 200..<300 ~= httpResponse.statusCode else {
-				result(.failure(.serverError(httpResponse.statusCode)))
-				return
-			}
-
+			
 			guard let data = data else {
 				result(.failure(.unableToParseData))
 				return

@@ -6,9 +6,6 @@
 //
 
 import Foundation
-//https://itunes.apple.com/search?term=""&media=all&limit=20&offset=0
-//https://itunes.apple.com/search?term=""&media=all&limit=20&offset=0
-
 
 enum APIRouter: ServiceConfiguration {
 	case search(term: String?, media: MediaType, limit: Int, offset: Int)
@@ -19,6 +16,7 @@ enum APIRouter: ServiceConfiguration {
 	
 	private static let baseURL = "https://itunes.apple.com"
 	
+	/// Determine the endpoint for each case in the enumeration
 	private var endPoint: String {
 		switch self {
 		case .search: return "/search?"
@@ -32,7 +30,7 @@ enum APIRouter: ServiceConfiguration {
 	var method: HTTPMethod {
 		return .get
 	}
-	
+	/// Define the parameters for each case in the enumeration
 	private var parameters: [(String, String)] {
 		var params: [(String, String)] = []
 		switch self {

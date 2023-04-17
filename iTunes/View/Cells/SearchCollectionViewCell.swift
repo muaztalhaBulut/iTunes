@@ -9,6 +9,8 @@ import UIKit
 import Kingfisher
 
 final class SearchCollectionViewCell: UICollectionViewCell {
+	
+	//MARK: -> else condition
 	private lazy var randomImage: String = "https://km.support.apple.com/resources/sites/APPLE/content/live/IMAGES/0/IM749/en_US/itunes-macos-icon-240.png"
 	
 	private lazy var imageView: UIImageView = {
