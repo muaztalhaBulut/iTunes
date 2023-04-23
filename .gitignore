@@ -16,3 +16,4 @@ DerivedData/
 
 # Other
 *.mp4
+.DS_Store
